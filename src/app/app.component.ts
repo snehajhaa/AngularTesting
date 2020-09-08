@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {CommonService } from './common.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Title } from '@angular/platform-browser';
 
 
 @Component({
@@ -17,7 +18,9 @@ export class AppComponent implements OnInit{
   isSuccess = true;
   message = '';
 
-constructor(private commonService: CommonService, private formBuilder: FormBuilder){}
+constructor(private commonService: CommonService, private formBuilder: FormBuilder, private titleService: Title){
+  this.titleService.setTitle( this.title );
+}
   ngOnInit(): any {
     this.registerForm = this.formBuilder.group({
       name: ['', Validators.required],
@@ -25,12 +28,13 @@ constructor(private commonService: CommonService, private formBuilder: FormBuild
       motherName: ['', Validators.required],
       id: ['', Validators.required],
       admissionNo: ['', Validators.required],
-      mobile: ['', Validators.required],
+      mobile:  ['', [Validators.required, Validators.pattern("^((\\+91-?)|0)?[0-9]{10}$")]],
       email: ['', [Validators.required, Validators.email]],
     });
     this.getLatestUser();
   }
 
+  
   get f(): any { return this.registerForm.controls; }
 
   addUser(): any {
